@@ -51,10 +51,14 @@ const Detail = ({ item, comments }) => {
                             </Typography>
                         </h1>
                         <div className="flex space-x-2">
-                            <Typography weight="medium">
+                            <Typography
+                                size="b2"
+                                weight="medium">
                                 {createBy}
                             </Typography>
-                            <Typography weight="light">
+                            <Typography
+                                size="b2"
+                                weight="light">
                                 - {dayjs(createdAt).fromNow()}
                             </Typography>
                         </div>
@@ -72,7 +76,7 @@ const Detail = ({ item, comments }) => {
                         <Typography
                             weight="medium"
                             size="h2">
-                            Comments
+                            Comment
                         </Typography>
                     </h2>
                     <p className="divide-y">
