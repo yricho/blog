@@ -7,8 +7,8 @@ import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { AiOutlineArrowLeft } from "react-icons/ai"
 import Head from "next/head"
-import Image from "next/image"
 import APPNAME from "../helper/const"
+
 dayjs.extend(relativeTime)
 
 const Detail = ({ item, comments }) => {
@@ -33,7 +33,7 @@ const Detail = ({ item, comments }) => {
 
                 <section className="space-y-4 lg:col-span-2">
                     <div className="relative">
-                        <Image
+                        <img
                             className="object-cover w-full h-96"
                             alt={title}
                             src={image} />

@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Carousel from "nuka-carousel"
 
 const Banner = ({ items }) => {
@@ -10,12 +9,11 @@ const Banner = ({ items }) => {
                 renderBottomCenterControls={false} >
                 {
                     items.map((item, index) => (
-                        <Image
+                        <img
                             alt={item.title}
                             className="w-full h-80 object-cover"
                             key={index}
-                            src={item.images}
-                        />
+                            src={item.images} />
                     ))
                 }
             </Carousel>

@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import { Typography } from "./Typography"
 
@@ -6,7 +5,7 @@ const Card = ({ item }) => {
     const { id, title, image, previewContent } = item
     return (
         <div className="border">
-            <Image
+            <img
                 alt={title}
                 className="object-cover w-full h-64"
                 src={image} />
