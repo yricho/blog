@@ -3,7 +3,6 @@ import { deleteComment, postComments, updateComment } from "../pages/api/comment
 import Button from "./Button"
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md"
 import { Typography } from "./Typography";
-import dayjs from "dayjs";
 
 const Comments = ({ idArticle, items }) => {
 
@@ -103,12 +102,6 @@ const Comments = ({ idArticle, items }) => {
                                                     weight="light"
                                                     size="b1">
                                                     {item.comment}
-                                                </Typography>
-                                                <Typography
-                                                    className="block text-gray-500"
-                                                    weight="light"
-                                                    size="b2">
-                                                    {dayjs(item.createdAt).fromNow()}
                                                 </Typography>
                                                 <MdOutlineEdit
                                                     onClick={() => {
