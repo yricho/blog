@@ -1,4 +1,4 @@
-import { MOCKAPI } from "../helper/const"
+import { MOCKAPI } from "../../helper/const";
 
 export const getBanners = async () => {
     try {

@@ -1,9 +1,10 @@
 import { useState } from "react"
+import Button from "./Button"
 
 const Search = ({ callback }) => {
     const [keyword, setKeyword] = useState()
     return (
-        <div>
+        <div className="flex">
             <input
                 onChange={e => setKeyword(e.target.value)}
                 onKeyDown={e => {
@@ -14,10 +15,14 @@ const Search = ({ callback }) => {
                 maxLength={255}
                 type="search"
                 value={keyword}
-                placeholder={`Title`}
-                className='w-full outline-none ml-2'
+                placeholder={`Search article`}
+                className='w-full outline-none p-2 border text-2xl'
             />
-            <button onClick={() => callback(keyword)}>Search</button>
+            <Button onClick={() => {
+                if (keyword) { callback(keyword) }
+            }}>
+                Search
+            </Button>
         </div>
     )
 }

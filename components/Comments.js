@@ -1,78 +1,125 @@
-import { useState } from "react";
-import { deleteComment, updateComment } from "../pages/api/comment";
+import { useState } from "react"
+import { deleteComment, postComments, updateComment } from "../pages/api/comment"
+import Button from "./Button"
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md"
+import { Typography } from "./Typography";
 
 const Comments = ({ idArticle, items }) => {
 
+    const [commentItems, setCommentItems] = useState(items)
     const [commentText, setCommentText] = useState()
     const [indexUpdate, setIndexUpdate] = useState()
+    const [user, setUsername] = useState("")
+    const [comment, setComment] = useState("")
+    const [loadComment, setLoadComment] = useState(false)
 
-    const handleDeleteComment = async (idComment) => {
-        await deleteComment(idArticle, idComment).then(response => {
-            console.warn(response);
-        })
+    const handleDeleteComment = async item => {
+        const newItems = commentItems.filter(i => i.id !== item.id)
+        setCommentItems(newItems)
+        await deleteComment(idArticle, item.id)
+            .catch(error => console.warn(error))
     }
 
     const handleUpdateComment = async (idComment, data) => {
-        await updateComment(idArticle, idComment, data).then(response => {
-            console.warn(response);
-        })
+        let commentItem = commentItems.find(comment => comment.id === idComment)
+        commentItem.comment = data.comment
+        setCommentItems(commentItems)
+        await updateComment(idArticle, idComment, data)
+            .catch(error => console.warn(error))
+    }
+
+    const handlePostComment = async comment => {
+        setLoadComment(true)
+        await postComments(idArticle, comment)
+            .then(response => {
+                setCommentItems([...commentItems, response])
+                setLoadComment(false)
+                setUsername("")
+                setComment("")
+            })
+            .catch(error => console.warn(error))
     }
 
     return (
-        <div style={{
-            border: "solid 1px"
-        }}>
-            {items?.map((item, index) => (
-                <div key={index}>
-                    <div>
-                        <strong>
-                            {item.user}
-                        </strong>
-                    </div>
-                    <div>
-                        {
-                            indexUpdate === index ?
-                                <input
-                                    type="text"
-                                    value={commentText}
-                                    onChange={e => setCommentText(e.target.value)} />
-                                :
-                                <div onClick={() => {
-                                    setIndexUpdate(index)
-                                    setCommentText(item.comment)
-                                }
-                                }>
-                                    {item.comment}
+        <>
+            <div className="space-y-2 py-4">
+                <input
+                    className="border p-2 w-full text-2xl"
+                    type="text"
+                    value={user}
+                    onChange={e => setUsername(e.target.value)} placeholder="Name (optional)" />
+                <input
+                    className="border p-2 w-full text-2xl"
+                    type="text"
+                    value={comment}
+                    onChange={e => setComment(e.target.value)}
+                    placeholder="Comment" />
+                <Button onClick={() => {
+                    if (comment !== "") {
+                        handlePostComment({ user, comment })
+                    }
+                }}>
+                    {loadComment ? "Add..." : "Add"}
+                </Button>
+            </div>
+            <div className="divide-y space-y-2 py-4">
+                {
+                    commentItems?.sort((a, b) => (a.id > b.id ? -1 : 1))
+                        .map((item, index) => (
+                            <div key={index} className="py-2">
+                                <Typography
+                                    className="capitalize"
+                                    weight="medium"
+                                    size="b1">
+                                    {item.user}
+                                </Typography>
+                                <div>
+                                    {
+                                        indexUpdate === index ?
+                                            <div className="flex space-x-2">
+                                                <input
+                                                    className="w-full border p-2 text-2xl"
+                                                    type="text"
+                                                    value={commentText}
+                                                    onChange={e => setCommentText(e.target.value)} />
+                                                <Button
+                                                    onClick={() => {
+                                                        if (commentText !== "") {
+                                                            handleUpdateComment(item.id, {
+                                                                user: item.user,
+                                                                comment: commentText
+                                                            })
+                                                            setIndexUpdate(null)
+                                                        }
+                                                    }}>
+                                                    Update
+                                                </Button>
+                                            </div>
+                                            :
+                                            <div className="space-x-2">
+                                                <Typography
+                                                    className="block"
+                                                    weight="light"
+                                                    size="b1">
+                                                    {item.comment}
+                                                </Typography>
+                                                <MdOutlineEdit
+                                                    onClick={() => {
+                                                        setIndexUpdate(index)
+                                                        setCommentText(item.comment)
+                                                    }}
+                                                    className="inline cursor-pointer text-blue-500 w-6 h-6" />
+                                                <MdDeleteOutline
+                                                    className="inline cursor-pointer text-red-500 w-6 h-6"
+                                                    onClick={() => handleDeleteComment(item)} />
+                                            </div>
+                                    }
                                 </div>
-                        }
-                    </div>
-                    <button
-                        onClick={() => {
-                            handleUpdateComment(item.id, {
-                                user: item.user,
-                                comment: commentText
-                            })
-                            // setIndexUpdate(null)
-                        }}>
-                        Update
-                    </button>
-                    <button onClick={() => handleDeleteComment(item.id)}>Delete</button>
-                </div>
-            ))}
-        </div>
-    )
-}
-
-export const PostComment = ({ onPost }) => {
-
-    const [user, setUsername] = useState("")
-    const [comment, setComment] = useState("")
-    return (
-        <div>
-            <input type="text" value={user} onChange={e => setUsername(e.target.value)} placeholder="Anonymous" />
-            <input type="text" value={comment} onChange={e => setComment(e.target.value)} placeholder="Your comment" />
-            <button onClick={() => onPost({ user, comment })}>Create</button>
-        </div>
+                            </div>
+                        ))
+                }
+            </div>
+        </>
     )
 }
 

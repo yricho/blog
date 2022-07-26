@@ -1,10 +1,11 @@
-import { useRouter } from "next/router"
+import Nav from "./Nav"
+import { Typography } from "./Typography"
 
 const Layout = ({ children }) => {
     return (
         <div>
-            <Header />
-            <div>
+            <Nav />
+            <div className="max-w-screen-xl mx-auto">
                 {children}
             </div>
             <Footer />
@@ -12,22 +13,14 @@ const Layout = ({ children }) => {
     )
 }
 
-const Header = () => {
-    const router = useRouter()
-    return (
-        <div>
-            <div onClick={() => router.push('/')}>
-                Home
-            </div>
-        </div>
-    )
-}
-
 const Footer = () => {
     return (
-        <div>
-            Footer
-        </div>
+        <footer className="h-20 flex items-center justify-center">
+            <Typography
+                className="text-gray-700">
+                &copy; {new Date().getFullYear()} All Rights Reserved.
+            </Typography>
+        </footer>
     )
 }
 

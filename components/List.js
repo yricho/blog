@@ -1,11 +1,11 @@
-import { ListCard } from "./Card"
+import Card from "./Card"
 
 const List = ({ items }) => {
     return (
-        <div>
+        <div className="grid sm:grid-cols-2 gap-4">
             {items?.map((item, index) => (
                 <div key={index}>
-                    <ListCard item={item} />
+                    <Card item={item} />
                 </div>
             ))}
         </div>
